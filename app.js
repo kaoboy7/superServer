@@ -30,7 +30,9 @@ app.use(function(req, res, next) {
 });
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/poll');
+// mongoose.connect('mongodb://localhost:27017/poll');
+
+mongoose.connect('mongodb://super:super@ds031802.mongolab.com:31802/heroku_app36997371');
 
 
 // view engine setup
