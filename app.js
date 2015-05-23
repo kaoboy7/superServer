@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var compress = require('compression');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
@@ -11,10 +12,14 @@ require('./models/Polls');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var polls = require('./routes/polls');
-
-
+var config = require('./config/config.js');
 
 var app = express();
+
+
+
+// Set default NODE_ENV to be development
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Add Middleware necessary for REST API's
 app.use(bodyParser.urlencoded({extended: true}));
@@ -32,7 +37,9 @@ app.use(function(req, res, next) {
 // Connect to MongoDB
 // mongoose.connect('mongodb://localhost:27017/poll');
 
-mongoose.connect('mongodb://super:super@ds031802.mongolab.com:31802/heroku_app36997371');
+console.log("Connecting to mongoose: " + config.mongodb)
+
+mongoose.connect(config.mongodb);
 
 
 // view engine setup
@@ -62,8 +69,12 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
-  console.log("Running in development mode");
+
+console.log("Running in environment: " + process.env.NODE_ENV);
+if (process.env.NODE_ENV === 'production') {
+  app.use(compress());
+} else {
+  // Running in development / alpha
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -73,6 +84,18 @@ if (app.get('env') === 'development') {
     console.log(err.stack);
   });
 }
+
+// if (app.get('env') === 'development') {
+//   console.log("Running in development mode");
+//   app.use(function(err, req, res, next) {
+//     res.status(err.status || 500);
+//     res.render('error', {
+//       message: err.message,
+//       error: err
+//     });
+//     console.log(err.stack);
+//   });
+// }
 
 // production error handler
 // no stacktraces leaked to user
