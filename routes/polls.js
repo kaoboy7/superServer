@@ -74,9 +74,6 @@ router.get('/', function(req, res, next) {
     res.json(poll);
     
   });
-
-  // res.setHeader('Content-Type', 'application/json');
-  // res.end(JSON.stringify({ hello : "world"}));
 });
 
 router.get('/:poll', function(req, res, next) {
@@ -121,19 +118,19 @@ router.delete("/:poll", function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
-  console.log(JSON.stringify(req.body));
+    console.log(JSON.stringify(req.body));
 
     // Create new poll
     var poll = new Poll();
     poll.question = req.body.question;
     poll.answers = [];
 
-
     // Add answers to poll
     var answerArray = req.body.answers;
     for (var i = 0; i < answerArray.length; i++) {
       poll.answers.push({answer: answerArray[i].answer});
     }
+
     // Save
     poll.save(function(err, poll) {
       if (err) {
@@ -141,23 +138,6 @@ router.post('/', function(req, res, next) {
       }
       res.json(poll);
     });
-
-    // Add answers to poll
-    // var answerArray = req.body.answers;
-    // for (var i = 0; i < answerArray.length; i++) {
-    //   var answer = new Answer({answer: answerArray[i].answer});
-    //   answer.save(function(err, answer) {
-    //     if (err) {
-    //       return next(err);
-    //     }
-    //   });
-
-    //   console.log("This is answer.answer=" + answer.answer);
-    //   poll.answers.push(answer);
-    //   // Save
-
-    // }
-
   });
 
 router.put('/:poll/answers/:answer/upvote', function(req, res, next) {
@@ -168,19 +148,6 @@ router.put('/:poll/answers/:answer/upvote', function(req, res, next) {
     if (err) { return next(err); }
     res.json(post);
   });
-
-  // var poll = new Poll(req.body);
-  // var updateData =poll.toObject();
-  // delete updateData._id;
-  // Poll.update({_id: req.params.poll}, updateData, {upsert: true}, function(err){
-  //   if (err) {
-  //       return next(err);
-  //   }
-  // });
-
-  // res.json(poll);
-
-
 });
 
 

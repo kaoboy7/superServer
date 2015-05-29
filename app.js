@@ -35,10 +35,7 @@ app.use(function(req, res, next) {
 });
 
 // Connect to MongoDB
-// mongoose.connect('mongodb://localhost:27017/poll');
-
 console.log("Connecting to mongoose: " + config.mongodb)
-
 mongoose.connect(config.mongodb);
 
 
@@ -85,23 +82,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// if (app.get('env') === 'development') {
-//   console.log("Running in development mode");
-//   app.use(function(err, req, res, next) {
-//     res.status(err.status || 500);
-//     res.render('error', {
-//       message: err.message,
-//       error: err
-//     });
-//     console.log(err.stack);
-//   });
-// }
-
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-
-  console.log("Running in production mode");
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
